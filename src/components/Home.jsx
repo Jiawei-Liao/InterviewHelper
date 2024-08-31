@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import Header from './Header'
 import ShuffleIcon from '@mui/icons-material/Shuffle'
 import GroupsIcon from '@mui/icons-material/Groups'
+import AnalyticsIcon from '@mui/icons-material/Analytics'
 
 function Home() {
     const navigate = useNavigate()
@@ -23,12 +24,15 @@ function Home() {
                         Demo Interview
                     </Typography>
                 </Button>
+                <Button variant='contained' sx={{ display: 'flex', alignItems: 'center', gap: 1, height: 70, width: 300 }} onClick={() => navigate('/demo')}>
+                    <AnalyticsIcon />
+                    <Typography>
+                        Latest Report
+                    </Typography>
+                </Button>
             </Box>
         </Box>
     )
 }
 
 export default Home
-/**
- * randomOptions={randomOptions} setRandomOptions={setRandomOptions}
- */
