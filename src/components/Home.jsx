@@ -24,7 +24,7 @@ function Home() {
                         Demo Interview
                     </Typography>
                 </Button>
-                <Button variant='contained' sx={{ display: 'flex', alignItems: 'center', gap: 1, height: 70, width: 300 }} onClick={() => navigate('/demo')}>
+                <Button variant='contained' sx={{ display: 'flex', alignItems: 'center', gap: 1, height: 70, width: 300 }} onClick={() => navigate('/report')} disabled={!(JSON.parse(localStorage.getItem('reportData')))}>
                     <AnalyticsIcon />
                     <Typography>
                         Latest Report
