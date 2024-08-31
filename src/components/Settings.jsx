@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Box, Typography, Dialog, DialogActions, DialogContent, DialogTitle, Switch, Button, TextField } from '@mui/material'
+import { Box, Typography, Dialog, DialogActions, DialogContent, DialogTitle, Switch, Button, TextField, Alert } from '@mui/material'
 import Papa from 'papaparse'
 
 function Settings({ closeDialog }) {
@@ -7,6 +7,21 @@ function Settings({ closeDialog }) {
         'OpenAI API Key': '',
         'True Random': false,
     })
+    const [error, setError] = useState('')
+
+    function validateSettings() {
+        const isValid = Object.entries(settings).some(([key, value]) => {
+            return key !== 'OpenAI API Key' && key !== 'True Random' && value === true;
+        })
+        
+        if (isValid) {
+            setError('')
+            closeDialog()
+        } else {
+            setError('You must leave at least 1 option open!')
+        }
+        
+    }
 
     useEffect(() => {
         const loadSettings = async () => {
@@ -25,7 +40,7 @@ function Settings({ closeDialog }) {
                                 types.add(row.type)
                             }
                         })
-                        console.log(results)
+                        
                         setSettings(prevSettings => {
                             const newSettings = { ...prevSettings }
                             types.forEach(type => {
@@ -38,7 +53,6 @@ function Settings({ closeDialog }) {
                                 }
                             })
 
-                            console.log(newSettings)
                             return newSettings
                         })
                     }
@@ -62,7 +76,8 @@ function Settings({ closeDialog }) {
     }
 
     return (
-        <Dialog open={true} onClose={closeDialog}>
+        <Dialog open={true} onClose={validateSettings}>
+            {error && <Alert severity="error">{error}</Alert>}
             <DialogTitle>Settings</DialogTitle>
             <DialogContent>
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
@@ -81,7 +96,7 @@ function Settings({ closeDialog }) {
                                     onChange={handleChange(option)}
                                 />
                             ) : (
-                                <Box sx={{ flex:2, padding:1 }}>
+                                <Box sx={{ flex: 2, padding: 1 }}>
                                     <TextField
                                         value={settings[option]}
                                         onChange={handleChange(option)}
@@ -93,7 +108,7 @@ function Settings({ closeDialog }) {
                 </Box>
             </DialogContent>
             <DialogActions>
-                <Button onClick={closeDialog} color="primary">
+                <Button onClick={validateSettings} color="primary">
                     Close
                 </Button>
             </DialogActions>
