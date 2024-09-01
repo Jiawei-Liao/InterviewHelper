@@ -76,13 +76,23 @@ function Interview({ question, finishInterview }) {
     
                 const formData = new FormData()
                 formData.append('file', recordedBlob, 'recording.mp3')
-    
+
+                const APIKey = JSON.parse(localStorage.getItem('settingsData'))['OpenAI API Key'] || ''
+                const data = {
+                    APIKey: APIKey,
+                    question: question.question,
+                    questionType: question.type
+                }
+
+                formData.append('data', JSON.stringify(data))
+                
                 try {
-                    const response = await fetch('http://localhost:5000/transcribe', {
+                    const response = await fetch('http://localhost:5000/getFeedback', {
                         method: 'POST',
                         body: formData,
                     })
                     const result = await response.json()
+                    console.log(result)
                     setReceivedData(result)
                 } catch (error) {
                     console.error('Error sending audio to server:', error)
@@ -106,7 +116,7 @@ function Interview({ question, finishInterview }) {
     return (
         <Paper sx={{ display: 'flex', height: '90%', width: '70%', border: '2px solid rgba(0, 0, 0, 0.2)', borderRadius: '8px', gap: 5, padding: 5 }}>
             <Box sx={{ width: '40%', display: 'flex', flexDirection: 'column', gap: 5, paddingTop: 4 }}>
-                <Typography variant="h5">
+                <Typography variant='h5'>
                     {question.question}
                 </Typography>
                 <Button onClick={record} variant='contained' disabled={recordingStatus === 'recorded'}>
@@ -118,7 +128,7 @@ function Interview({ question, finishInterview }) {
                     </Box>
                 )}
                 {(recordingStatus === 'recorded') && (receivedData) && (
-                    <Button variant="contained" color="success" onClick={clickFinishInterview}>
+                    <Button variant='contained' color='success' onClick={clickFinishInterview}>
                         Continue
                     </Button>
                 )}
@@ -134,8 +144,8 @@ function Interview({ question, finishInterview }) {
                     ref={videoRef}
                     autoPlay
                     playsInline
-                    width="100%"
-                    height="100%"
+                    width='100%'
+                    height='100%'
                     style={{ borderRadius: '8px' }}
                 />
             </Box>
