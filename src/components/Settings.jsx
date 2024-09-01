@@ -77,7 +77,7 @@ function Settings({ closeDialog }) {
 
     return (
         <Dialog open={true} onClose={validateSettings}>
-            {error && <Alert severity="error">{error}</Alert>}
+            {error && <Alert severity='error'>{error}</Alert>}
             <DialogTitle>Settings</DialogTitle>
             <DialogContent>
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
@@ -108,7 +108,7 @@ function Settings({ closeDialog }) {
                 </Box>
             </DialogContent>
             <DialogActions>
-                <Button onClick={validateSettings} color="primary">
+                <Button onClick={validateSettings} color='primary'>
                     Close
                 </Button>
             </DialogActions>
