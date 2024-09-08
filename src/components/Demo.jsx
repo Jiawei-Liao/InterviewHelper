@@ -32,7 +32,7 @@ function Demo() {
         const getQuestion = async () => {
             if (demoQuestionNumber >= demoQuestionTypes.current.length) {
                 saveInterviewReport(interviewData)
-                navigate('/report')
+                navigate('/feedback', { state: interviewData })
             } else {
                 const questionType = demoQuestionTypes.current[demoQuestionNumber]
                 const fetchedQuestion = await fetchQuestion(questionType, seenQuestions.current)

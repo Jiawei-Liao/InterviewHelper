@@ -23,7 +23,7 @@ function Random() {
             data: data
         }]
         saveInterviewReport(interviewData)
-        navigate('/report')
+        navigate('/feedback', { state: interviewData })
     }
 
     return (

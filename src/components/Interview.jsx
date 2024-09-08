@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Box, Paper, Typography, Button, CircularProgress } from '@mui/material'
+import { Box, Paper, Typography, Button, CircularProgress, Snackbar, Alert } from '@mui/material'
 
 function Interview({ question, finishInterview }) {
     const videoRef = useRef(null)
@@ -9,30 +9,47 @@ function Interview({ question, finishInterview }) {
     const mediaRecorder = useRef(null)
     const chunks = useRef([])
     const [receivedData, setReceivedData] = useState(null)
+    const [error, setError] = useState(false)
+    const [errorMsg, setErrorMsg] = useState('')
+    const timerRef = useRef(null)
+    const errorTimer = 5000
 
     useEffect(() => {
         const startVideoStream = async () => {
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true })
                 if (videoRef.current) {
-                    videoRef.current.srcObject = stream;
+                    videoRef.current.srcObject = stream
                 }
             } catch (error) {
-                console.error('Error accessing camera: ', error);
+                console.error('Error accessing camera: ', error)
             }
-        };
+        }
     
-        startVideoStream();
+        startVideoStream()
 
-        const videoElement = videoRef.current;
+        const videoElement = videoRef.current
         return () => {
             if (videoElement && videoElement.srcObject) {
-                const stream = videoElement.srcObject;
-                const tracks = stream.getTracks();
-                tracks.forEach((track) => track.stop());
+                const stream = videoElement.srcObject
+                const tracks = stream.getTracks()
+                tracks.forEach((track) => track.stop())
             }
-        };
-    }, []);
+        }
+    }, [])
+
+    function toggleError(errorMsg) {
+        setErrorMsg(errorMsg)
+        setError(true)
+
+        if (timerRef.current) {
+            clearTimeout(timerRef.current)
+        }
+
+        timerRef.current = setTimeout(() => {
+            setError(false)
+        }, errorTimer)
+    }
 
     async function record() {
         if (recordingStatus === 'waiting') {
@@ -77,7 +94,16 @@ function Interview({ question, finishInterview }) {
                 const formData = new FormData()
                 formData.append('file', recordedBlob, 'recording.mp3')
 
-                const APIKey = JSON.parse(localStorage.getItem('settingsData'))['OpenAI API Key'] || ''
+                let APIKey = ''
+                const settingsData = localStorage.getItem('settingsData')
+                if (settingsData) {
+                    const parsedData = JSON.parse(settingsData)
+                    APIKey = parsedData['OpenAI API Key'] || ''
+                }
+                if (APIKey === '') {
+                    toggleError('Please provide an OpenAI API key to continue!')
+                } 
+
                 const data = {
                     APIKey: APIKey,
                     question: question.question,
@@ -95,6 +121,7 @@ function Interview({ question, finishInterview }) {
                     console.log(result)
                     setReceivedData(result)
                 } catch (error) {
+                    toggleError('Failed to send audio to server. Please check the following:\n1. API Key: Ensure the API key is correct.\n2. Server Status: Verify that the backend server is running.')
                     console.error('Error sending audio to server:', error)
                 }
             }
@@ -105,16 +132,27 @@ function Interview({ question, finishInterview }) {
     function clickFinishInterview() {
         setRecordingStatus('waiting')
         setRecordedUrl('')
-        chunks.current = [];  // Reset chunks
-        mediaStream.current?.getTracks().forEach((track) => track.stop());  // Stop the media stream
-        mediaStream.current = null;  // Reset mediaStream reference
-        mediaRecorder.current = null;
+        chunks.current = []
+        mediaStream.current?.getTracks().forEach((track) => track.stop())
+        mediaStream.current = null
+        mediaRecorder.current = null
         setReceivedData(null)
         finishInterview(receivedData)
     }
 
     return (
         <Paper sx={{ display: 'flex', height: '90%', width: '70%', border: '2px solid rgba(0, 0, 0, 0.2)', borderRadius: '8px', gap: 5, padding: 5 }}>
+            {error && (
+                <Snackbar
+                    open={error}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                    autoHideDuration={errorTimer}
+                >
+                    <Alert severity="error" variant="filled" sx={{ whiteSpace: 'pre-line' }}>
+                        {errorMsg}
+                    </Alert>
+                </Snackbar>
+            )}
             <Box sx={{ width: '40%', display: 'flex', flexDirection: 'column', gap: 5, paddingTop: 4 }}>
                 <Typography variant='h5'>
                     {question.question}

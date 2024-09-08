@@ -66,11 +66,11 @@ export async function fetchQuestion(type = '', seenQuestions = []) {
 
         const filteredArray = questionsList.filter(item => !seenQuestions.includes(item.question))
         if (filteredArray.length > 0) {
-            const randomIndex = Math.floor(Math.random() * filteredArray.length);
-            return filteredArray[randomIndex];
+            const randomIndex = Math.floor(Math.random() * filteredArray.length)
+            return filteredArray[randomIndex]
         } else {
             console.error('No questions possible')
-            return '';
+            return ''
         }
     } catch (error) {
         console.error('Error fetching question:', error)
@@ -79,6 +79,15 @@ export async function fetchQuestion(type = '', seenQuestions = []) {
 }
 
 export function saveInterviewReport(data) {
-    localStorage.setItem('reportData', JSON.stringify(data))
+    const existingDataJSON = localStorage.getItem('reportData')
+    const existingData = existingDataJSON ? JSON.parse(existingDataJSON) : []
 
+    const dataObject = {
+        interviews: data,
+        date: new Date().toISOString()
+    }
+    
+    existingData.push(dataObject)
+    existingData.sort((a, b) => new Date(b.date) - new Date(a.date))
+    localStorage.setItem('reportData', JSON.stringify(existingData))
 }
