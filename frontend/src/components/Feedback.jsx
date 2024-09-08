@@ -6,10 +6,7 @@ import { useLocation } from 'react-router-dom'
 function Feedback() {
     const location = useLocation()
     const feedback = location.state
-    console.log(feedback)
-    /**
-        @todo: might need to get feedback from local storage with specific data based on index provided by param
-    **/
+
     return (
         <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
             <Header />

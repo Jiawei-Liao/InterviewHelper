@@ -111,14 +111,12 @@ function Interview({ question, finishInterview }) {
                 }
 
                 formData.append('data', JSON.stringify(data))
-                
                 try {
-                    const response = await fetch('http://localhost:5000/getFeedback', {
+                    const response = await fetch('/getFeedback', {
                         method: 'POST',
                         body: formData,
                     })
                     const result = await response.json()
-                    console.log(result)
                     setReceivedData(result)
                 } catch (error) {
                     toggleError('Failed to send audio to server. Please check the following:\n1. API Key: Ensure the API key is correct.\n2. Server Status: Verify that the backend server is running.')

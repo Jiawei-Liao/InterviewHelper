@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom'
 
 function Report() {
     const storedData = JSON.parse(localStorage.getItem('reportData')) || {}
-    console.log(storedData)
     const navigate = useNavigate()
 
     function goToFeedback(index) {
