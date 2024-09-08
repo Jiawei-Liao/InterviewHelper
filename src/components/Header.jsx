@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 import { AppBar, Toolbar, Box, Typography, IconButton } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import Settings from './Settings'

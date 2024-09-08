@@ -11,7 +11,7 @@ function Settings({ closeDialog }) {
 
     function validateSettings() {
         const isValid = Object.entries(settings).some(([key, value]) => {
-            return key !== 'OpenAI API Key' && key !== 'True Random' && value === true;
+            return key !== 'OpenAI API Key' && key !== 'True Random' && value === true
         })
         
         if (isValid) {
