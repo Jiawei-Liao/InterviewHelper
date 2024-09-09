@@ -1,4 +1,4 @@
-import { Box, Paper, IconButton, Typography, Divider } from '@mui/material'
+import { Box, Button, Typography, Divider, Stack, Grid2 } from '@mui/material'
 import Header from './Header'
 import { useNavigate } from 'react-router-dom'
 
@@ -24,22 +24,30 @@ function Report() {
 
     return (
         <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
-            <Header />
-            <Box sx={{ flex: 1, overflowY: 'auto', padding: 2, width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3 }}>
-                {storedData && storedData.map((item, index) => (
-                    <IconButton sx={{ borderRadius: 0 }} color='inherit' onClick={() => goToFeedback(index)}>
-                        <Paper key={index} sx={{ height: 80, width: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 1, gap: 15 }}>
-                            <Typography variant='h5'>
-                                {new Date(item.date).toLocaleString()}
+          <Header />
+          <Box sx={{ flex: 1, overflowY: 'auto', padding: 2, width: '100%', display: 'flex', justifyContent: 'center' }}>
+            <Stack spacing={3} sx={{ width: '50%' }}>
+              {storedData && storedData.map((item, index) => (
+                <Button key={index} variant='contained' sx={{ height: 80, minHeight: 80, width: '100%'}} onClick={() => goToFeedback(index)}>
+                    <Grid2 container spacing={2} sx={{ width: '100%' }}>
+                        <Grid2 size={7}>
+                            <Typography>
+                                {new Date(item.date).toLocaleDateString(navigator.language || 'en-US', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true})}
                             </Typography>
-                            <Divider orientation="vertical" variant="middle" flexItem />
-                            <Typography variant='h5'>
+                        </Grid2>
+                        <Grid2 size={1} justifyContent='center'>
+                            <Divider orientation='vertical' />
+                        </Grid2>
+                        <Grid2 size={4} justifyContent='flex-start'>
+                            <Typography>
                                 {getInterviewType(item.interviews)}
                             </Typography>
-                        </Paper>
-                    </IconButton>
-                ))}
-            </Box>
+                        </Grid2>
+                    </Grid2>
+                </Button>
+              ))}
+            </Stack>
+          </Box>
         </Box>
     )
 }

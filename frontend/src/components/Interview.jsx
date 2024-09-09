@@ -175,14 +175,33 @@ function Interview({ question, finishInterview }) {
 
                 )}
             </Box>
-            <Box sx={{ width: '60%' }}>
+            <Box sx={{ width: '60%', position: 'relative' }}>
+                <img
+                    src='./NoCamera.png'
+                    alt='Camera placeholder'
+                    style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        borderRadius: '8px',
+                        zIndex: 1
+                    }}
+                />
                 <video
                     ref={videoRef}
                     autoPlay
                     playsInline
                     width='100%'
                     height='100%'
-                    style={{ borderRadius: '8px' }}
+                    style={{
+                        objectFit: 'cover',
+                        borderRadius: '8px',
+                        zIndex: 2,
+                        position: 'relative'
+                    }}
                 />
             </Box>
         </Paper>
