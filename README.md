@@ -8,7 +8,7 @@ The recorded audio is then converted to an mp3 file to transfer to the backend F
 ![feedback](demo/feedback.png)
 
 The homepage offers two modes: Random and Interview. In Random, a single random question is generated, while Interview presents a structured set of questions in a specific order and type. Select Past Reports to review your previous attempts.
-~[home](demo/home.png)
+![home](demo/home.png)
 
 # Usage
 1. Run `docker-compose up --build`
