@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Box, Paper, Typography, Button, CircularProgress, Snackbar, Alert } from '@mui/material'
+import { useNavigate } from 'react-router-dom'
 
 function Interview({ question, finishInterview }) {
     const videoRef = useRef(null)
@@ -13,6 +14,8 @@ function Interview({ question, finishInterview }) {
     const [errorMsg, setErrorMsg] = useState('')
     const timerRef = useRef(null)
     const errorTimer = 5000
+    const [toReturn, setToReturn] = useState(false)
+    const navigate = useNavigate()
 
     useEffect(() => {
         const startVideoStream = async () => {
@@ -121,6 +124,7 @@ function Interview({ question, finishInterview }) {
                 } catch (error) {
                     toggleError('Failed to send audio to server. Please check the following:\n1. API Key: Ensure the API key is correct.\n2. Server Status: Verify that the backend server is running.')
                     console.error('Error sending audio to server:', error)
+                    setToReturn(true)
                 }
             }
             
@@ -129,6 +133,7 @@ function Interview({ question, finishInterview }) {
 
     function clickFinishInterview() {
         setRecordingStatus('waiting')
+        setToReturn(false)
         setRecordedUrl('')
         chunks.current = []
         mediaStream.current?.getTracks().forEach((track) => track.stop())
@@ -166,6 +171,11 @@ function Interview({ question, finishInterview }) {
                 {(recordingStatus === 'recorded') && (receivedData) && (
                     <Button variant='contained' color='success' onClick={clickFinishInterview}>
                         Continue
+                    </Button>
+                )}
+                {(recordingStatus === 'recorded') && (toReturn) && (
+                    <Button variant='contained' color='secondary' onClick={() => navigate('/')}>
+                        Return
                     </Button>
                 )}
                 {(recordingStatus === 'recorded') && !(receivedData) && (
