@@ -10,6 +10,8 @@ The recorded audio is then converted to an mp3 file to transfer to the backend F
 The homepage offers two modes: Random and Interview. In Random, a single random question is generated, while Interview presents a structured set of questions in a specific order and type. Select Past Reports to review your previous attempts.
 ![home](demo/home.png)
 
+There is also a feedback popup in the top right. Feel free to give me any suggestions on how I can improve my project!
+
 # Usage
 1. Run `docker-compose up --build`
 2. Open `localhost:3000` on your browser
@@ -17,6 +19,5 @@ The homepage offers two modes: Random and Interview. In Random, a single random 
 4. Paste key into settings
 
 # Future
-- Finish suggestions page, linked with a database for users to give me suggestions or feedback
 - Create my own speech to text ML model
 - Fine tune LLM for the purpose of giving personalised feedback for improvement
