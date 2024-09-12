@@ -2,20 +2,30 @@ import React, { useState } from 'react'
 import { AppBar, Toolbar, Box, Typography, IconButton } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import Settings from './Settings'
+import Suggestions from './Suggestions'
 import FeedbackIcon from '@mui/icons-material/Feedback'
 import GitHubIcon from '@mui/icons-material/GitHub'
 import SettingsIcon from '@mui/icons-material/Settings'
 
 function Header() {
     const navigate = useNavigate()
-    const [isDialogOpen, setIsDialogOpen] = useState(false)
+    const [isSettingsDialogOpen, setIsSettingsDialogOpen] = useState(false)
+    const [isSuggestionsDialogOpen, setIsSuggestionsDialogOpen] = useState(false)
 
-    function openDialog() {
-        setIsDialogOpen(true)
+    function openSettingsDialog() {
+        setIsSettingsDialogOpen(true)
     }
 
-    function closeDialog() {
-        setIsDialogOpen(false)
+    function closeSettingsDialog() {
+        setIsSettingsDialogOpen(false)
+    }
+
+    function openSuggestionsDialog() {
+        setIsSuggestionsDialogOpen(true)
+    }
+
+    function closeSuggestionsDialog() {
+        setIsSuggestionsDialogOpen(false)
     }
 
     return (
@@ -31,16 +41,17 @@ function Header() {
                         <IconButton sx={{ borderRadius: 0 }} color='inherit' onClick={() => window.open('https://github.com/Jiawei-Liao/InterviewHelper', '_blank') }>
                             <GitHubIcon />
                         </IconButton>
-                        <IconButton sx={{ borderRadius: 0 }} color='inherit' onClick={() => navigate('/feedback') }>
+                        <IconButton sx={{ borderRadius: 0 }} color='inherit' onClick={openSuggestionsDialog}>
                             <FeedbackIcon />
                         </IconButton>
-                        <IconButton sx={{ borderRadius: 0 }} color='inherit' onClick={openDialog}>
+                        <IconButton sx={{ borderRadius: 0 }} color='inherit' onClick={openSettingsDialog}>
                             <SettingsIcon />
                         </IconButton>
                     </Box>
                 </Toolbar>
             </AppBar>
-            {isDialogOpen && <Settings closeDialog={closeDialog} />}
+            {isSettingsDialogOpen && <Settings closeDialog={closeSettingsDialog} />}
+            {isSuggestionsDialogOpen && <Suggestions closeDialog={closeSuggestionsDialog} />}
         </Box>
     )
 }

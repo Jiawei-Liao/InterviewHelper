@@ -108,9 +108,7 @@ function Settings({ closeDialog }) {
                 </Box>
             </DialogContent>
             <DialogActions>
-                <Button onClick={validateSettings}>
-                    Close
-                </Button>
+                <Button onClick={validateSettings} color="secondary">Close</Button>
             </DialogActions>
         </Dialog>
     )
