@@ -119,8 +119,16 @@ function Interview({ question, finishInterview }) {
                         method: 'POST',
                         body: formData,
                     })
-                    const result = await response.json()
-                    setReceivedData(result)
+                    if (response.ok) {
+                        const result = await response.json()
+                        setReceivedData(result)
+                    } else if (response.status === 500) {
+                        toggleError('Unfortunately the backend is not being hosted')
+                    } else {
+                        toggleError('Failed to send audio to server. Please check the following:\n1. API Key: Ensure the API key is correct.\n2. Server Status: Verify that the backend server is running.')
+                        console.error('Error sending audio to server:', error)
+                    }
+                    setToReturn(true)
                 } catch (error) {
                     toggleError('Failed to send audio to server. Please check the following:\n1. API Key: Ensure the API key is correct.\n2. Server Status: Verify that the backend server is running.')
                     console.error('Error sending audio to server:', error)
